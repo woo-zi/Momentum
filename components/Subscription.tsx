@@ -28,7 +28,7 @@ const Subscription: React.FC = () => {
       {/* Header */}
       <div className="text-center mb-16 pt-8">
         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6">
-          INVEST IN YOUR <span className="text-primary">PERFORMANCE</span>.
+          JOIN THE <span className="text-primary">MOMENTUM</span>.
         </h1>
         
         {/* Toggle */}
@@ -86,21 +86,28 @@ const Subscription: React.FC = () => {
           </div>
         </div>
 
-        {/* Pro Athlete - Hero Card */}
+        {/* Pro - Hero Card */}
         <div className="bg-[#0a0a0a] border border-primary rounded-2xl p-8 flex flex-col h-full relative shadow-[0_0_50px_-10px_rgba(139,92,246,0.2)] scale-105 z-10">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] px-4 py-1 rounded-full shadow-lg">
             Most Popular
           </div>
           <div className="mb-8">
             <h3 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
-              <Crown className="w-5 h-5 fill-current" /> PRO ATHLETE
+              <Crown className="w-5 h-5 fill-current" /> PRO
             </h3>
             <p className="text-gray-400 text-sm font-medium uppercase tracking-widest">For the obsessed</p>
           </div>
-          <div className="mb-8 flex items-baseline gap-3">
-            <span className="text-5xl font-black text-white">99 SEK</span>
-            <span className="text-gray-500 font-bold line-through text-lg">199 SEK</span>
-            <span className="text-gray-500 text-sm">/mo</span>
+          <div className="mb-8 flex flex-col">
+            <div className="flex items-baseline gap-3">
+              <span className="text-5xl font-black text-white">{billingCycle === 'yearly' ? '99 SEK' : '129 SEK'}</span>
+              {billingCycle === 'yearly' && (
+                 <span className="text-gray-500 font-bold line-through text-lg">129 SEK</span>
+              )}
+              <span className="text-gray-500 text-sm">/mo</span>
+            </div>
+             {billingCycle === 'yearly' && (
+                  <span className="text-xs text-primary font-medium mt-2">Billed 1188 SEK yearly</span>
+              )}
           </div>
           
           <Button className="w-full mb-3 py-4 text-lg shadow-[0_0_20px_rgba(139,92,246,0.5)] hover:shadow-[0_0_30px_rgba(139,92,246,0.7)]">

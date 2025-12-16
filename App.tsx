@@ -3,12 +3,16 @@ import Dashboard from './components/Dashboard';
 import WorkoutLab from './components/WorkoutLab';
 import LandingPage from './components/LandingPage';
 import Subscription from './components/Subscription';
+import PublicPricing from './components/PublicPricing';
 import { Home, Dumbbell, MessageSquare, Settings, LogOut, Wallet, Crown } from 'lucide-react';
 import { askCoach } from './services/geminiService';
 import { AppView } from './types';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [publicView, setPublicView] = useState<'landing' | 'pricing'>('landing');
+  const [userTier, setUserTier] = useState<'free' | 'pro'>('free');
+  
   const [currentView, setCurrentView] = useState<AppView>('dashboard');
   const [chatOpen, setChatOpen] = useState(false);
   const [chatQuery, setChatQuery] = useState('');
@@ -35,7 +39,15 @@ const App: React.FC = () => {
   };
 
   if (!isAuthenticated) {
-    return <LandingPage onLogin={() => setIsAuthenticated(true)} />;
+    if (publicView === 'pricing') {
+       return <PublicPricing onBack={() => setPublicView('landing')} onSignup={() => setIsAuthenticated(true)} />;
+    }
+    return (
+      <LandingPage 
+        onLogin={() => setIsAuthenticated(true)} 
+        onNavigateToPricing={() => setPublicView('pricing')} 
+      />
+    );
   }
 
   return (
@@ -91,10 +103,10 @@ const App: React.FC = () => {
 
         <div className="space-y-2 border-t border-[#262626] pt-4">
             <div className="px-3 py-2 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary"></div>
+              <div className={`w-8 h-8 rounded-full ${userTier === 'pro' ? 'bg-gradient-to-tr from-primary to-secondary' : 'bg-gray-700'}`}></div>
               <div className="hidden lg:block">
                 <p className="text-sm font-bold text-white">Alex D.</p>
-                <p className="text-xs text-gray-500">Pro Plan</p>
+                <p className="text-xs text-gray-500 uppercase">{userTier} Plan</p>
               </div>
             </div>
             <button 
@@ -121,7 +133,7 @@ const App: React.FC = () => {
 
         <div className="flex-1 overflow-auto p-8 relative z-10">
           {currentView === 'dashboard' ? (
-            <Dashboard onNavigate={setCurrentView} />
+            <Dashboard onNavigate={setCurrentView} userTier={userTier} />
           ) : currentView === 'lab' ? (
             <WorkoutLab />
           ) : (

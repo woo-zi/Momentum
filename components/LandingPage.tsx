@@ -88,7 +88,7 @@ const ProModal: React.FC<{ isOpen: boolean; onClose: () => void; onSignup: () =>
   );
 };
 
-const LandingPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+const LandingPage: React.FC<{ onLogin: () => void; onNavigateToPricing: () => void }> = ({ onLogin, onNavigateToPricing }) => {
   const [showProModal, setShowProModal] = useState(false);
 
   const scrollToId = (id: string) => {
@@ -125,7 +125,7 @@ const LandingPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
           <button onClick={() => scrollToId('features')} className="hover:text-white transition-colors">Features</button>
           <button onClick={() => scrollToId('community')} className="hover:text-white transition-colors">Community</button>
-          <button onClick={() => scrollToId('pricing')} className="hover:text-white transition-colors">Pricing</button>
+          <button onClick={onNavigateToPricing} className="hover:text-white transition-colors">Pricing</button>
         </div>
 
         <Button variant="outline" onClick={onLogin} className="px-6 py-2 text-sm border-white/20 text-white hover:border-primary hover:text-primary">
@@ -150,7 +150,7 @@ const LandingPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <ShinyButton onClick={() => scrollToId('pricing')}>
+          <ShinyButton onClick={onNavigateToPricing}>
             Start Free Trial
           </ShinyButton>
           <Button 
@@ -225,60 +225,6 @@ const LandingPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
              </div>
           </SpotlightCard>
 
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-            NO CONTRACTS.<br />JUST RESULTS.
-          </h2>
-          <p className="text-gray-400">Simple pricing. Cancel anytime.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-           {/* Free Plan */}
-           <div className="bg-[#171717]/50 border border-[#262626] rounded-2xl p-8 flex flex-col hover:border-white/20 transition-colors">
-              <h3 className="text-xl font-bold text-white mb-2">STARTER</h3>
-              <span className="text-3xl font-black text-white mb-6">Free</span>
-              <ul className="space-y-4 mb-8 flex-1">
-                 <li className="flex gap-3 text-sm text-gray-300"><Check className="w-4 h-4 text-white" /> Manual Logging</li>
-                 <li className="flex gap-3 text-sm text-gray-300"><Check className="w-4 h-4 text-white" /> Basic Stats</li>
-              </ul>
-              <Button variant="outline" onClick={onLogin} className="w-full">CREATE ACCOUNT</Button>
-           </div>
-
-           {/* Pro Plan */}
-           <div className="bg-[#0a0a0a] border border-primary rounded-2xl p-8 flex flex-col relative shadow-[0_0_50px_-10px_rgba(139,92,246,0.2)] md:scale-110 z-10">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] px-4 py-1 rounded-full shadow-lg">
-                Most Popular
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-2 flex items-center gap-2">
-                <Crown className="w-5 h-5 fill-current" /> PRO ATHLETE
-              </h3>
-              <div className="mb-6 flex items-baseline gap-2">
-                <span className="text-4xl font-black text-white">99 SEK</span>
-                <span className="text-sm text-gray-500">/mo</span>
-              </div>
-              <ul className="space-y-4 mb-8 flex-1">
-                 <li className="flex gap-3 text-sm text-white font-bold"><Check className="w-4 h-4 text-primary" /> AI Neural Coach</li>
-                 <li className="flex gap-3 text-sm text-white font-bold"><Check className="w-4 h-4 text-primary" /> Exclusive Rewards</li>
-                 <li className="flex gap-3 text-sm text-white font-bold"><Check className="w-4 h-4 text-primary" /> Advanced Metrics</li>
-              </ul>
-              <ShinyButton onClick={onLogin} className="w-full">START TRIAL</ShinyButton>
-           </div>
-
-           {/* Team Plan */}
-           <div className="bg-[#171717]/50 border border-[#262626] rounded-2xl p-8 flex flex-col hover:border-white/20 transition-colors">
-              <h3 className="text-xl font-bold text-white mb-2">TEAM</h3>
-              <span className="text-3xl font-black text-white mb-6">Custom</span>
-              <ul className="space-y-4 mb-8 flex-1">
-                 <li className="flex gap-3 text-sm text-gray-300"><Check className="w-4 h-4 text-white" /> Bulk Licenses</li>
-                 <li className="flex gap-3 text-sm text-gray-300"><Check className="w-4 h-4 text-white" /> Team Leaderboards</li>
-              </ul>
-              <Button variant="outline" className="w-full">CONTACT SALES</Button>
-           </div>
         </div>
       </section>
 

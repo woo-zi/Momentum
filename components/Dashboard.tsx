@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, Button } from './UI';
-import { Zap, Activity, Trophy, ArrowRight } from 'lucide-react';
+import { Zap, Activity, Trophy, ArrowRight, Crown, Lock } from 'lucide-react';
 import { AppView } from '../types';
 
-const Dashboard: React.FC<{ onNavigate: (view: AppView) => void }> = ({ onNavigate }) => {
+const Dashboard: React.FC<{ onNavigate: (view: AppView) => void; userTier: 'free' | 'pro' }> = ({ onNavigate, userTier }) => {
   // SVG Config
   const radius = 70;
   const circumference = 2 * Math.PI * radius; // ~439.8
@@ -13,10 +13,26 @@ const Dashboard: React.FC<{ onNavigate: (view: AppView) => void }> = ({ onNaviga
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full auto-rows-min animate-fade-in pb-8">
       {/* Top Card: AI Coach Morning Briefing */}
       <Card className="col-span-1 md:col-span-3 bg-gradient-to-br from-[#171717] to-[#1a1a1a] relative overflow-hidden group border-primary/20">
-         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity duration-500">
-            <Zap className="w-64 h-64 text-white -rotate-12 translate-x-12 -translate-y-12" />
-         </div>
-         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+         
+         {/* Locked Overlay */}
+         {userTier === 'free' && (
+             <div className="absolute inset-0 z-50 flex flex-col items-center justify-center text-center p-6 animate-fade-in bg-black/40 backdrop-blur-[4px]">
+                 <div className="bg-black/50 p-4 rounded-full mb-4 border border-[#262626] shadow-2xl">
+                    <Lock className="w-8 h-8 text-gray-400" />
+                 </div>
+                 <h3 className="text-xl font-black text-white mb-2 tracking-tight uppercase">AI Insight Locked</h3>
+                 <p className="text-gray-300 max-w-sm mb-6 text-sm font-medium">Upgrade to unlock your daily recovery plan.</p>
+                 <Button onClick={() => onNavigate('subscription')} variant="primary" className="shadow-lg shadow-primary/20">UNLOCK ACCESS</Button>
+             </div>
+         )}
+         
+         {/* Blurred Content for Free Users */}
+         <div className={`relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 ${userTier === 'free' ? 'blur-sm grayscale opacity-50 pointer-events-none' : ''}`}>
+             {/* Background Element inside the wrapper so it blurs too */}
+            <div className="absolute -top-12 -right-12 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity duration-500">
+                <Zap className="w-64 h-64 text-white -rotate-12" />
+            </div>
+
             <div className="space-y-4">
                <div className="flex items-center gap-3">
                   <div className="flex h-3 w-3 relative">
@@ -124,39 +140,49 @@ const Dashboard: React.FC<{ onNavigate: (view: AppView) => void }> = ({ onNaviga
       </Card>
 
       {/* Bottom Section: Gamification/Rewards */}
-      <Card className="col-span-1 md:col-span-3 flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#171717]/80">
-         <div className="flex items-center gap-6 w-full lg:w-auto">
-            <div className="w-20 h-20 rounded-2xl bg-[#0a0a0a] border border-[#262626] flex items-center justify-center shadow-xl text-yellow-500 group relative overflow-hidden">
-               <div className="absolute inset-0 bg-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-               <Trophy className="w-10 h-10 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
-            </div>
-            <div>
-               <h3 className="text-gray-400 text-xs font-bold tracking-[0.2em] uppercase mb-1">Current Balance</h3>
-               <div className="text-5xl font-black text-white tracking-tighter flex items-baseline gap-2">
-                  450 <span className="text-lg font-bold text-secondary tracking-normal">PTS</span>
-               </div>
-            </div>
-         </div>
-         
-         <div className="flex-1 w-full max-w-2xl bg-[#0a0a0a] p-6 rounded-xl border border-[#262626]">
-             <div className="flex justify-between items-center mb-3">
-               <span className="text-white font-bold tracking-tight flex items-center gap-2">
-                 <Zap className="w-4 h-4 text-yellow-500" /> 
-                 Next Reward: 20% Off Nike
-               </span>
-               <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">50 PTS away</span>
-             </div>
-             <div className="h-4 bg-[#262626] rounded-full overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-1/2 -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                <div className="h-full bg-secondary w-[90%] rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)] relative">
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-full bg-white/50"></div>
-                </div>
-             </div>
-         </div>
+      <Card className="col-span-1 md:col-span-3 bg-[#171717]/80 relative overflow-hidden">
+          {/* Locked Overlay for Rewards */}
+          {userTier === 'free' && (
+              <div className="absolute inset-0 z-50 flex flex-col items-center justify-center text-center p-6 bg-black/40 backdrop-blur-[3px]">
+                 <p className="text-white text-lg font-bold mb-4 drop-shadow-md">You missed <span className="text-secondary">+450 pts</span> this week.</p>
+                 <Button onClick={() => onNavigate('subscription')} variant="secondary" className="font-bold shadow-[0_0_20px_rgba(6,182,212,0.3)]">Join Pro to claim</Button>
+              </div>
+          )}
 
-         <Button variant="outline" className="shrink-0 whitespace-nowrap w-full lg:w-auto hover:bg-white hover:text-black hover:border-white transition-all">
-            OPEN WALLET
-         </Button>
+         <div className={`flex flex-col lg:flex-row items-center justify-between gap-8 ${userTier === 'free' ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
+            <div className="flex items-center gap-6 w-full lg:w-auto">
+                <div className="w-20 h-20 rounded-2xl bg-[#0a0a0a] border border-[#262626] flex items-center justify-center shadow-xl text-yellow-500 group relative overflow-hidden">
+                   <div className="absolute inset-0 bg-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                   <Trophy className="w-10 h-10 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
+                </div>
+                <div>
+                   <h3 className="text-gray-400 text-xs font-bold tracking-[0.2em] uppercase mb-1">Current Balance</h3>
+                   <div className="text-5xl font-black text-white tracking-tighter flex items-baseline gap-2">
+                      450 <span className="text-lg font-bold text-secondary tracking-normal">PTS</span>
+                   </div>
+                </div>
+            </div>
+            
+            <div className="flex-1 w-full max-w-2xl bg-[#0a0a0a] p-6 rounded-xl border border-[#262626]">
+                 <div className="flex justify-between items-center mb-3">
+                   <span className="text-white font-bold tracking-tight flex items-center gap-2">
+                     <Zap className="w-4 h-4 text-yellow-500" /> 
+                     Next Reward: 20% Off Nike
+                   </span>
+                   <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">50 PTS away</span>
+                 </div>
+                 <div className="h-4 bg-[#262626] rounded-full overflow-hidden relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-1/2 -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                    <div className="h-full bg-secondary w-[90%] rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)] relative">
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-full bg-white/50"></div>
+                    </div>
+                 </div>
+            </div>
+
+            <Button variant="outline" className="shrink-0 whitespace-nowrap w-full lg:w-auto hover:bg-white hover:text-black hover:border-white transition-all">
+                OPEN WALLET
+            </Button>
+         </div>
       </Card>
     </div>
   );
